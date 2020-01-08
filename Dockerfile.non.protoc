@@ -1,0 +1,70 @@
+FROM frolvlad/alpine-glibc
+
+RUN apk update
+RUN apk add g++ curl file git gzip ncurses ruby ruby-dbm ruby-etc ruby-irb ruby-json sudo
+
+#RUN adduser -D -s /bin/bash linuxbrew
+#RUN echo 'linuxbrew ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+#RUN sudo -l linuxbrew
+
+#RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+#RUN curl -sSf https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh > homebrew.sh
+#RUN sudo sh ./homebrew.sh -y
+#RUN PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
+#RUN git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
+#RUN mkdir ~/.linuxbrew/bin
+#RUN ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin/brew
+#RUN eval $(~/.linuxbrew/bin/brew shellenv)
+#https://github.com/protocolbuffers/protobuf/releases/download/v3.11.1/protoc-3.11.1-linux-x86_64.zip
+
+RUN PROTOC_ZIP=protoc-3.7.1-linux-x86_64.zip
+RUN curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.11.1/protoc-3.11.1-linux-x86_64.zip
+RUN sudo unzip -o protoc-3.11.1-linux-x86_64.zip -d /usr/local bin/protoc
+RUN sudo unzip -o protoc-3.11.1-linux-x86_64.zip -d /usr/local 'include/*'
+RUN rm -f protoc-3.11.1-linux-x86_64.zip
+
+RUN curl https://sh.rustup.rs -sSf > rustup-init.sh
+
+ENV RUST_VERSION=1.39.0
+
+RUN sudo sh ./rustup-init.sh -y --no-modify-path --profile minimal --default-toolchain $RUST_VERSION
+
+RUN ~/.cargo/bin/rustup --version; \
+    ~/.cargo/bin/cargo --version; \
+    ~/.cargo/bin/rustc --version;
+
+
+#RUN brew --version
+
+CMD ["tail","-f","/dev/null"]
+
+RUN USER=root ~/.cargo/bin/cargo new --bin rustic-auth
+WORKDIR /rustic-auth
+
+COPY ./Cargo.lock ./Cargo.lock
+COPY ./Cargo.toml ./Cargo.toml
+#
+RUN cargo build --release --verbose
+RUN rm src/*.rs
+
+COPY ./src ./src
+COPY ./.env.stage ./.env
+
+RUN pwd
+RUN ls -al src
+RUN ls target/release
+RUN rm target/release/deps/rustic_auth*
+RUN cargo build --release
+
+
+
+#FROM ubuntu:latest
+#
+#ENV DEBIAN_FRONTEND=noninteractive
+#
+#RUN apt-get update && apt-get -y install ca-certificates libssl-dev && rm -rf /var/lib/apt/lists/*
+#
+#COPY --from=0 /build-out/rustic_auth /
+EXPOSE 4114
+
+CMD target/release/rustic_auth
