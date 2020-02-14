@@ -137,7 +137,11 @@
       <workItem from="1575401878672" duration="24705000" />
       <workItem from="1575934657914" duration="216000" />
       <workItem from="1575934889821" duration="34670000" />
-      <workItem from="1578435066735" duration="3629000" />
+      <workItem from="1578435066735" duration="12418000" />
+      <workItem from="1579110616845" duration="2409000" />
+      <workItem from="1579192994654" duration="5696000" />
+      <workItem from="1580500348686" duration="5730000" />
+      <workItem from="1581533493323" duration="9654000" />
     </task>
     <servers />
   </component>
@@ -166,11 +170,11 @@
       <screen x="1440" y="23" width="1920" height="1177" />
     </state>
     <state x="1954" y="240" width="1251" height="858" key="SettingsEditor/3360.23.1920.1177/1440.23.1920.1177/0.23.1440.877@1440.23.1920.1177" timestamp="1575401806836" />
-    <state x="77" y="40" width="1440" height="877" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1578096742838">
+    <state x="77" y="40" width="1440" height="877" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1580501387179">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="77" y="40" width="1440" height="877" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1440.877/3360.116.1920.1057/1440.23.1920.1057@3360.116.1920.1057" timestamp="1576881258313" />
-    <state x="-20" y="24" width="1440" height="877" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1440.877@0.23.1440.877" timestamp="1575940099965" />
+    <state x="-20" y="24" width="1440" height="877" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1440.877@0.23.1440.877" timestamp="1579039814528" />
   </component>
   <component name="masterDetails">
     <states>

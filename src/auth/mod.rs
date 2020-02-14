@@ -3,27 +3,23 @@ extern crate oauth2;
 extern crate rand;
 extern crate url;
 extern crate dotenv;
-extern crate rustic_users;
+extern crate nats;
 
 use oauth2::{Config, Token, TokenError};
 use url::Url;
 use dotenv::dotenv;
 use std::env;
 use actix_web::client;
+use nats::*;
 
 use std::sync::Arc;
-
-use grpc::{Client, SingleResponse};
-use grpc::ClientStub;
-
-use rustic_users::rustic::*;
-use rustic_users::rustic_grpc::*;
 
 pub struct Auth{}
 
 impl Auth {
     pub fn auth() -> String {
         dotenv().ok();
+
         let mut client_id = env::var("CLIENT_ID").expect("Client ID is missing");
         let mut client_secret = env::var("CLIENT_SECRET").expect("Client secret is missing");
         let mut auth_url = env::var("AUTH_URL").expect("Auth URL is missing");

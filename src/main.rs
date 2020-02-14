@@ -4,8 +4,13 @@ extern crate actix_web;
 extern crate diesel;
 #[macro_use]
 extern crate serde_derive;
+extern crate nats;
+
+extern crate bincode;
 
 use std::{io};
+use std::str;
+use nats::*;
 
 use actix_cors::Cors;
 use actix_web::{web, middleware, http, App, HttpServer, HttpRequest, HttpResponse, Result};
@@ -13,21 +18,11 @@ use actix_web::{web, middleware, http, App, HttpServer, HttpRequest, HttpRespons
 use serde_json::json;
 use rustic_auth::establish_connection;
 
-pub mod schema;
-mod location;
 mod auth;
 
 #[derive(Deserialize)]
 struct Info {
     code: String,
-}
-
-fn all_locations() -> HttpResponse {
-
-    let connection = establish_connection();
-    let results = location::Location::all(&connection);
-
-    HttpResponse::Ok().json(&results)
 }
 
 fn log_in() -> HttpResponse {
@@ -65,16 +60,31 @@ fn main() -> io::Result<()> {
     dotenv::dotenv().ok();
     use std::net::{SocketAddr};
     let connection = establish_connection();
-    let results = location::Location::all(&connection);
+//    let results = location::Location::all(&connection);
+    let mut nats_client = Client::new("nats://rustic.local:4222").unwrap();
 
-    println!("Number of locations: {}", results.len());
+    nats_client.set_name("rustic");
+    nats_client.publish("rustic.auth", "test".as_bytes()).unwrap();
+
+    let s1 = nats_client.subscribe("rustic.*", Some("rustic")).unwrap();
+
+    let event = nats_client.wait();
+
+    println!("Event received: {}", str::from_utf8(&event.unwrap().msg).unwrap());
     let addr = SocketAddr::from(([0, 0, 0, 0],4114));
 
     HttpServer::new(
         ||
             App::new()
             .wrap(
-                Cors::new().supports_credentials()
+                Cors::new()
+                    .allowed_origin("*")
+                    .allowed_origin("http://rustic.local")
+                    .allowed_origin("http://localhost:1977")
+                    .allowed_methods(vec!["GET", "POST"])
+                    .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+                    .allowed_header(http::header::CONTENT_TYPE)
+                    .max_age(3600)
             )
             .wrap(middleware::Logger::default())
 
