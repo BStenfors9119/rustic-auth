@@ -2,9 +2,6 @@
 extern crate diesel;
 extern crate dotenv;
 
-pub mod schema;
-pub mod location;
-
 use diesel::prelude::*;
 use dotenv::dotenv;
 use std::env;
