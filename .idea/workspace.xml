@@ -66,7 +66,7 @@
       <recent name="$PROJECT_DIR$/src/templates" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Cargo Command.build">
     <configuration name="build" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="build --package rustic_web --lib" />
@@ -142,6 +142,7 @@
       <workItem from="1579192994654" duration="5696000" />
       <workItem from="1580500348686" duration="5730000" />
       <workItem from="1581533493323" duration="9654000" />
+      <workItem from="1581955162932" duration="617000" />
     </task>
     <servers />
   </component>
